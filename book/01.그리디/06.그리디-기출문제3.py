@@ -20,3 +20,5 @@ for i in range(len(S)-1):
             cnt1 += 1
 
 res = min(cnt0, cnt1)
+
+print(res)
