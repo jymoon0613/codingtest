@@ -1,2 +1,2 @@
-# codingtest
-rep. for coding test
+# Coding Test
+Repository for Coding Test
