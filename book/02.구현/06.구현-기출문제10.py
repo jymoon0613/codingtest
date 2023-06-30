@@ -121,7 +121,7 @@ def check(key, lock):
             else:
                 checker[i][j] = lock[i][j]
 
-    if sum([sum(row) for row in checker]) == r_l * c_l:
+    if sum([sum(row) for row in checker]) == r * c:
         
         return 1
     
