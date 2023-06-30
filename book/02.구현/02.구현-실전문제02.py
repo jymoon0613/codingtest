@@ -1,5 +1,7 @@
 # 게임 개발
 
+## 나의 답안 ##
+
 N, M = list(map(int, input().split()))
 
 A, B, d = list(map(int, input().split()))
@@ -56,7 +58,7 @@ while True:
     
 print(len(visits))
 
-## 답안 예시
+## 예시 답안 ##
 
 n, m = map(int, input().split())
 
