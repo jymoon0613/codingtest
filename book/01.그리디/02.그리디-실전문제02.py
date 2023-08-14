@@ -1,19 +1,34 @@
 # 숫자 카드 게임
 
-N, M = list(map(int, input().split()))
+## 나의 답안 ##
 
-array = [list(map(int, input().split())) for _ in range(N)]
+n, m = map(int, input().split())
 
-res = -1
-ind_row = None
+max_num = -1
+for i in range(n):
+    data = list(map(int, input().split()))
+    min_num = int(1e+9)
+    for j in range(m):
+        if data[j] < min_num:
+            min_num = data[j]
 
-for i in range(N):
-    arr = array[i]
-    
-    mini = min(arr)
-    
-    if mini > res:
-        res = mini
-        ind_row = i
+
+    if min_num > max_num:
+        max_num = min_num
+
+print(max_num)
+
+## 예시 답안 ##
+
+n, m = list(map(int, input().split()))
+
+result = 0
+
+for i in range(n):
+    data = list(map(int, input().split()))
+
+    min_value = min(data)
+
+    result = max(result, min_value)
         
-print(res)
+print(result)

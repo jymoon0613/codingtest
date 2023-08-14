@@ -1,33 +1,69 @@
 # 큰 수의 법칙
 
-N, M, K = list(map(int, input().split()))
+## 나의 답안 ##
+
+n, m, k  = map(int, input().split())
 
 array = list(map(int, input().split()))
 
-array_sorted = sorted(array, reverse=True)
+array.sort(reverse=True)
 
-res = 0
-cnt = 0
+num1 = array[0]
+num2 = array[1]
+
+result = 0
+for i in range(m):
+    if (i+1) % k == 0:
+        result += num2
+
+    else:
+        result += num1
+
+print(result)
+
+## 예시 답안 1 ##
+
+n, m, k = list(map(int, input().split()))
+
+data = list(map(int, input().split()))
+
+data.sort()
+first = data[n-1]
+second = data[n-2]
+
+result = 0
 
 while True:
-    
-    num1 = array_sorted[0]
-    num2 = array_sorted[1]
-    
-    for i in range(K):
-        
-        if cnt == M:
+
+    for i in range(k):
+        if m == 0:
             break
-        
-        res += num1
-        
-        cnt += 1
-            
-    if cnt == M:
+        result += first
+        m -=1
+
+    if m == 0:
         break
-        
-    res += num2
-        
-    cnt += 1
-            
-print(res)
+
+    result += second
+    m -= 1
+
+print(result)
+
+## 예시 답안 2 ##
+
+n, m, k = list(map(int, input().split()))
+
+data = list(map(int, input().split()))
+
+data.sort()
+first = data[n-1]
+second = data[n-2]
+
+count = int(m / (k+1)) * k
+count += m % (k+1)
+
+result = 0
+result += (count) * first
+result += (m-count) * second
+
+print(result)

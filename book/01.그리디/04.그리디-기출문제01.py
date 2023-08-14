@@ -1,17 +1,37 @@
 # 모험가 길드
 
-N = int(input())
-F = list(map(int, input().split()))
+## 나의 답안 ##
 
-F.sort()
+n = int(input())
+data = list(map(int, input().split()))
 
-res = 0
+data.sort()
+result = 0
 cnt = 0
 
-for i in F:
+for i in range(n):
+
     cnt += 1
+
     if cnt >= i:
-        res += 1
+        result += 1
         cnt = 0
-        
-print(cnt)
+    
+print(result)
+
+## 예시 답안 ##
+
+n = int(input())
+data = list(map(int, input().split()))
+data.sort()
+
+result = 0
+count = 0
+
+for i in data:
+    count += 1
+    if count >= i:
+        result += 1
+        count = 0
+    
+print(result)

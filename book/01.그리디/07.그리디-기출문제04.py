@@ -1,17 +1,33 @@
 # 만들 수 없는 금액
 
-N = int(input())
-coins = list(map(int, input().split()))
+## 나의 답안 ##
 
-coins.sort()
+n = int(input())
+data = list(map(int, input().split()))
+
+data.sort()
+result = 1
+
+for d in data:
+    if d > result:
+        break
+    else:
+        result += d
+
+print(result)
+
+## 예시 답안 ##
+
+n = int(input())
+data = list(map(int, input().split()))
+data.sort()
 
 target = 1
 
-for x in coins:
-    
-    if target < x:
+for x in data:
+    if x > target:
         break
-    
-    target += x
-    
+    else:
+        target += x
+
 print(target)
