@@ -11,164 +11,55 @@ lock = input()
 key = json.loads(key)
 lock = json.loads(lock)
 
-def rotate(key, r):
-    
-    if r == 'none':
-        
-        key_s = key
-        
-    elif r == '90':
-        
-        key_s = rotation(key)
-        
-    elif r == '180':
-        
-        key_s = rotation(key)
-        key_s = rotation(key_s)
-        
-    else:
-        key_s = rotation(key)
-        key_s = rotation(key_s)
-        key_s = rotation(key_s)
-        
-    return key_s
-        
+def turn_key(key):
+    output = [[0] * len(key) for _ in range(len(key))]
 
-def rotation(key):
-    
-    r = len(key)
-    c = len(key[0])
-    
-    key_t = [[0] * c for _ in range(r)]
-    
-    # transpose
-    for i in range(r):
-        for j in range(c):
-            key_t[i][j] = key[j][i]
-    
-    key_r = [[0] * c for _ in range(r)]
-    
-    # vertical flip
-    for i in range(r):
-        for j in range(c):
-            key_r[i][j] = key_t[i][c-1-j]
-    
-    
-    return key_r
+    for i in range(len(key)):
+        for j in range(len(key)):
+            output[i][j] = key[j][len(key)-1-i]
 
-def shift(key, d):
-    
-    r = len(key)
-    c = len(key[0])
-    
-    key_s = [[0] * c for _ in range(r)]
-    
-    if d == 'none':
-        for i in range(r):
-            for j in range(c):
-                key_s[i][j] = key[i][j]
-    
-    elif d == 'top':
-        for i in range(r):
-            for j in range(c):
-                if (i + 1) < r:
-                    key_s[i][j] = key[i+1][j]
-                else:
-                    key_s[i][j] = 0
-        
-    elif d == 'down':
-        for i in range(r):
-            for j in range(c):
-                if (i - 1) >= 0:
-                    key_s[i][j] = key[i-1][j]
-                else:
-                    key_s[i][j] = 0
-    
-    elif d == 'left':
-        for i in range(r):
-            for j in range(c):
-                if (j + 1) < c:
-                    key_s[i][j] = key[i][j+1]
-                else:
-                    key_s[i][j] = 0
-                    
-    else:
-        for i in range(r):
-            for j in range(c):
-                if (j - 1) >= 0:
-                    key_s[i][j] = key[i][j-1]
-                else:
-                    key_s[i][j] = 0
-    
-    return key_s
+    return output
 
-def check(key, lock):
-    
-    r = len(lock)
-    c = len(lock[0])
-    
-    checker = [[0] * c for _ in range(r)]
-    
-    for i in range(r):
-        for j in range(c):
-            
-            if (key[i][j] == 1) and (checker[i][j] == 1):
-                return 0
-            
-            elif (key[i][j] == 1) and (checker[i][j] == 0):
-                checker[i][j] = 1
-            
-            else:
-                checker[i][j] = lock[i][j]
+def check(array_copy, lock, offset):
+    res = 0
+    for i in range(len(lock)):
+        for j in range(len(lock)):
+            res += array_copy[i+offset][j+offset]
 
-    if sum([sum(row) for row in checker]) == r * c:
-        
-        return 1
+    if res == (len(lock) ** 2):
+        return True
     
     else:
-        
-        return 0
-    
+        return False
+
 def solution(key, lock):
+
+    offset = len(key) - 1
+
+    array = [[0] * (len(lock) + 2 * offset) for _ in range(len(lock) + 2 * offset)]
+
+    for i in range(len(lock)):
+        for j in range(len(lock)):
+            array[i+offset][j+offset] = lock[i][j]
     
-    r_l = len(lock)
-    c_l = len(lock[0])
+    for _ in range(4):
+        
+        key = turn_key(key)
 
-    r_k = len(key)
-    c_k = len(key[0])
-
-    pad = r_l - r_k
-
-    if pad != 0:
-
-        key = [row + [0] * pad for row in key]
-    
-    rotations = ['none', '90', '180', '270']
-    shifts = ['none', 'top', 'down', 'left', 'right']
-
-    range_shift = r_k - 1
-
-    for rot in rotations:
-
-        key_copy = copy.deepcopy(key)
-
-        key_copy = rotate(key_copy, rot)
-
-        for shi1 in shifts:
-            for _ in range(range_shift):
-                key_copy = shift(key_copy, shi1)
-                for shi2 in shifts:
-                    for _ in range(range_shift):
-                        key_copy = shift(key_copy, shi2)
-
-                        res = check(key_copy, lock)
-
-                        if res == 1:
-                            return 'true'
+        for i in range(len(lock) + offset):
+            for j in range(len(lock) + offset):
+                array_copy = copy.deepcopy(array)
+                for x in range(len(key)):
+                    for y in range(len(key)):
+                        array_copy[x+i][y+j] += key[x][y]
+                if check(array_copy, lock, offset):
+                    print('true')
+                    return
                         
-    return 'false'
+    print('false')
+    return
 
-print(solution(key, lock))
+solution(key, lock)
 
 ## 예시 답안 ##
 

@@ -2,26 +2,22 @@
 
 ## 나의 답안 ##
 
-S = list(input())
+s = input()
 
-alps = []
 nums = []
-
-for s in S:
-    if s.isnumeric() == True:
-        nums.append(int(s))
-    
+alps = []
+for i in range(len(s)):
+    if s[i].isnumeric():
+        nums.append(int(s[i]))
     else:
-        alps.append(s)
-        
-nums = sum(nums)
+        alps.append(s[i])
+
+nums.sort()
 alps.sort(key=lambda x: ord(x))
 
-alps.append(str(nums))
+alps = ''.join(alps)
 
-res = ''.join(alps)
-
-print(res)
+print(alps + str(sum(nums)))
 
 ## 예시 답안 ##
 

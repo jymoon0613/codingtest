@@ -2,61 +2,50 @@
 
 ## 나의 답안 ##
 
-N, M = list(map(int, input().split()))
+n, m = map(int, input().split())
 
-A, B, d = list(map(int, input().split()))
+a, b, d = map(int, input().split())
 
-array = [list(map(int, input().split())) for _ in range(N)]
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
 
-dx = [0, 1, 0, -1]
-dy = [-1, 0, 1, 0]
+array = []
+for i in range(n):
+    array.append(list(map(int, input().split())))
 
-visits = []
-
-visits.append((A, B))
-
+array[a][b] = 2
+result = 1
 cnt = 0
 while True:
-    
-    d += 1
-    
-    if d > 3:
-        d = 0
-        
-    cnt = 0
-    for ddx, ddy in zip(dx, dy):
-        A_next = A + ddx
-        B_next = B + ddy
-        
-        if array[B_next][A_next] == 1:
-            cnt += 1
-            
-        if (A_next, B_next) in visits:
-            cnt += 1
-            
-    if cnt == 4:
-        A_next = A - dx[d]
-        B_next = B - dy[d]
-        
-        if array[B_next][A_next] == 1:
-            break
-            
-        visits.append((A_next, B_next))
-        A = A_next
-        B = B_next
-        
+
+    d = (d + 3) % 4
+
+    nx = a + dx[d]
+    ny = b + dy[d]
+
+    if nx >= 0 and nx < n and ny >= 0 and ny < n and array[nx][ny] == 0:
+
+        a = nx
+        b = ny
+
+        result += 1
+        array[a][b] = 2
+        cnt = 0
+
     else:
-        A_next = A + dx[d]
-        B_next = B + dy[d]
-        
-        if (A_next, B_next) in visits:
-            continue
-            
-        visits.append((A_next, B_next))
-        A = A_next
-        B = B_next
-    
-print(len(visits))
+        cnt += 1
+
+    if cnt == 4:
+        a = a - dx[d]
+        b = b - dy[d]
+
+        cnt = 0
+
+        if array[a][b] == 1:
+
+            break
+
+print(result)
 
 ## 예시 답안 ##
 
@@ -65,7 +54,6 @@ n, m = map(int, input().split())
 d = [[0] * m for _ in range(n)]
 
 x, y, direction = map(int, input().split())
-
 d[x][y] = 1
 
 array = []
@@ -83,7 +71,6 @@ def turn_left():
         
 count = 1
 turn_time = 0
-
 while True:
     
     turn_left()
