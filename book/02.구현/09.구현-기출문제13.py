@@ -2,39 +2,42 @@
 
 ## 나의 답안 ##
 
-import itertools
+from itertools import combinations
 
-N, M = map(int, input().split())
+def cal(candidate, hs):
+    result = []
+    for i in range(len(hs)):
+        hx, hy = hs[i]
+        m = int(1e+9)
+        for cx, cy in candidate:
+            diff = abs(hx - cx) + abs(hy - cy)
+            if diff < m:
+                m = diff
 
-city = [list(map(int, input().split())) for _ in range(N)]
+        result.append(m)
 
-houses = []
-chickens = []
+    return sum(result)
 
-for i in range(N):
-    for j in range(N):
-        point = city[i][j]
-        if point == 1:
-            houses.append((i,j))
-        elif point == 2:
-            chickens.append((i,j))
+n, m = map(int, input().split())
+
+hs = []
+cs = []
+for i in range(n):
+    array = list(map(int, input().split()))
+    for j in range(n):
+        if array[j] == 1:
+            hs.append((i, j))
+        elif array[j] == 2:
+            cs.append((i, j))
         else:
             continue
 
-chickens_combs = list(itertools.combinations(chickens, M))
+candidates = combinations(cs, m)
 
 res = []
-for chickens_comb in chickens_combs:
-    chicken_dist = []
-    for house in houses:
-        minimum = 999
-        for chicken in chickens_comb:
-            dist = abs(chicken[0]-house[0]) + abs(chicken[1]-house[1])
-            if dist < minimum:
-                minimum = dist
-        chicken_dist.append(minimum)
-        
-    res.append(sum(chicken_dist))
+for candidate in candidates:
+
+    res.append(cal(candidate, hs))
 
 print(min(res))
 
