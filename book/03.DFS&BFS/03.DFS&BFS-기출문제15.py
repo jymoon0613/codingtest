@@ -4,47 +4,44 @@
 
 from collections import deque
 
-def bfs(matrix, X, visited, N, K):
-    
-    queue = deque()
-    
-    queue.append(X)
-    
-    visited[X] = 1
-    
-    dist = [0 for _ in range(N)]
-    
-    while queue:
-        x = queue.popleft()
-        for i in matrix[x]:
-            if visited[i] == 0:
-                queue.append(i)
-                if visited[i] == 1:
-                    continue
-                else:
-                    dist[i] = dist[x] + 1
-                    
-                visited[i] = 1
-    
-    cnt = 0
-    for i in range(N):
-        if dist[i] == K:
-            cnt += 1
-            print(i+1)
-    if cnt == 0:
-        print(-1)
+n, m, k, x = map(int, input().split())
 
-N, M, K, X = map(int, input().split())
+graph = [[] for _ in range(n+1)]
+for _ in range(m):
+    a, b = map(int, input().split())
+    graph[a].append(b)
 
-matrix = [[] for _ in range(N)]
+distance = [0] * (n+1)
 
-for _ in range(M):
-    start, end = map(int, input().split())
-    matrix[start-1].append(end-1)
-    
-visited = [0 for _ in range(N)]
+def bfs(graph, start, distance):
+
+    q = deque()
+
+    q.append(start)
+
+    distance[start] = 1
+
+    while q:
         
-print(bfs(matrix, X-1, visited, N, K))
+        x = q.popleft()
+
+        for i in graph[x]:
+            if distance[i] == 0:
+                distance[i] = distance[x] + 1
+                q.append(i)
+
+    result = []
+    for i in range(n+1):
+        if distance[i] == (k+1):
+            result.append(i)
+
+    if len(result) == 0:
+        print(-1)
+    else:
+        for r in result:
+            print(r)
+
+bfs(graph, x, distance)
 
 ## 예시 답안 ##
 

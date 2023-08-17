@@ -2,73 +2,60 @@
 
 ## 나의 답안 ##
 
+import copy
 from itertools import combinations
 
-N, M = map(int, input().split())
+n, m = map(int, input().split())
 
-graph = []
-for i in range(N):
-    row = list(map(int, input().split()))
-    graph.append(row)
-    
-virus = []
-possible = []
-for i in range(N):
-    for j in range(M):
-        if graph[i][j] == 2:
-            virus.append((i, j))
-            graph[i][j] = 0
-        elif graph[i][j] == 0:
-            possible.append((i, j))
-        else:
-            continue
-            
-candidates = list(combinations(possible, 3))
+array = []
+possibles = []
+for i in range(n):
+    array.append(list(map(int, input().split())))
+    for j in range(m):
+        if array[i][j] == 0:
+            possibles.append((i, j))
 
-def dfs(x, y, g):
-    
-    if x >= N or x < 0 or y >= M or y < 0:
+def calculate(array):
+    result = 0
+    for i in range(n):
+        for j in range(m):
+            if array[i][j] == 0:
+                result += 1
+
+    return result
+
+def dfs(array, x, y):
+
+    if x < 0 or x >= n or y < 0 or y >= m:
+
         return False
     
-    if g[x][y] == 0:
+    if array[x][y] == 0:
         
-        g[x][y] = 2
+        array[x][y] = 2
 
-        dfs(x+1, y, g)
-        dfs(x-1, y, g)
-        dfs(x, y+1, g)
-        dfs(x, y-1, g)
-    
+        dfs(array, x-1, y)
+        dfs(array, x+1, y)
+        dfs(array, x, y-1)
+        dfs(array, x, y+1)
+
     return True
 
-res = []
-for c in candidates:
-    c1, c2, c3 = c
-    graph[c1[0]][c1[1]] = 1
-    graph[c2[0]][c2[1]] = 1
-    graph[c3[0]][c3[1]] = 1
-    
-    for (x, y) in virus:
-        dfs(x, y, graph)
-    
-    cnt = 0
-    for i in range(N):
-        for j in range(M):
-            if graph[i][j] == 0:
-                cnt += 1
-                
-    res.append(cnt)
-    
-    for i in range(N):
-        for j in range(M):
-            if graph[i][j] == 2:
-                graph[i][j] = 0
-                
-    graph[c1[0]][c1[1]] = 0
-    graph[c2[0]][c2[1]] = 0
-    graph[c3[0]][c3[1]] = 0
+candidates = combinations(possibles, 3)
+result = -1
+for candidate in candidates:
+    array_copy = copy.deepcopy(array)
+    for x, y in candidate:
+        array_copy[x][y] = 1
+    for i in range(n):
+        for j in range(m):
+            if array_copy[i][j] == 2:
+                array_copy[i][j] = 0
+                dfs(array_copy, i, j)
 
-print(max(res))
+    result = max(result, calculate(array_copy))
+
+print(result)
 
 ## 예시 답안 ##
 
