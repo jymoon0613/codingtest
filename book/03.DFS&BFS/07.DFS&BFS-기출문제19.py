@@ -2,63 +2,43 @@
 
 ## 나의 답안 ##
 
-from itertools import permutations
+n = int(input())
 
-N = int(input())
-A = list(map(int, input().split()))
-nP, nM, nT, nD = map(int, input().split())
+a = list(map(int, input().split()))
 
-operators = []
-for _ in range(nP):
-    operators.append('+')
+add, sub, mul, div = list(map(int, input().split()))
 
-for _ in range(nM):
-    operators.append('-')
-    
-for _ in range(nT):
-    operators.append('*')
-    
-for _ in range(nD):
-    operators.append('/')
-    
-candidates = list(permutations(operators, N-1))
+mini = int(1e9)
+maxi = int(-1e9)
 
-result = []
+def solution(ind, now):
 
-res = 0
-for candidate in candidates:
-    for i in range(len(A)-1):
-        operator = candidate[i]
-        if operator == '+':
-            if i == 0:
-                res = A[i] + A[i+1]
-            else:
-                res = res + A[i+1]
-        elif operator == '-':
-            if i == 0:
-                res = A[i] - A[i+1]
-            else:
-                res = res - A[i+1]
-        elif operator == '*':
-            if i == 0:
-                res = A[i] * A[i+1]
-            else:
-                res = res * A[i+1]
-        else:
-            if i == 0:
-                if A[i] < 0:
-                    res = -(abs(A[i]) // A[i+1])
-                else:
-                    res = A[i] // A[i+1]
-            else:
-                if res < 0 :
-                    res = -(abs(res) // A[i+1])
-                else:
-                    res = res // A[i+1]
-                    
-    result.append(res)
-    
-print(max(result), min(result), sep='\n')
+    global a, add, sub, mul, div, mini, maxi
+
+    if ind == n:
+        mini = min(mini, now)
+        maxi = max(maxi, now)
+
+    if add >= 1:
+        add -= 1
+        solution(ind+1, now + a[ind])
+        add += 1
+    if sub >= 1:
+        sub -= 1
+        solution(ind+1, now - a[ind])
+        sub += 1
+    if mul >= 1:
+        mul -= 1
+        solution(ind+1, now * a[ind])
+        mul += 1
+    if div >= 1:
+        div -= 1
+        solution(ind+1, int(now / a[ind]))
+        div += 1
+
+solution(1, a[0])
+print(maxi)
+print(mini)
 
 ## 예시 답안 ##
 

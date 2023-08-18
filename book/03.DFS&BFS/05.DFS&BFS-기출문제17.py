@@ -4,70 +4,46 @@
 
 from collections import deque
 
-N, K = map(int, input().split())
+n, k = map(int, input().split())
 
-viruses = [[] for _ in range(K)]
 graph = []
-for _ in range(N):
-    row = list(map(int, input().split()))
-    graph.append(row)
-    
-for i in range(N):
-    for j in range(N):
+q = []
+for i in range(n):
+    graph.append(list(map(int, input().split())))
+    for j in range(n):
         if graph[i][j] != 0:
-            viruses[graph[i][j]-1].append((i, j))
-    
-S, X, Y = map(int, input().split())
+            q.append((graph[i][j], 0, i, j))
 
-dxs = [-1, 1, 0, 0]
-dys = [0, 0, -1, 1]
+q.sort(key=lambda x: x[0])
+q = deque(q)
 
-def search():
-    queues = []
-    for i in range(K):
-        queues.append(deque(viruses[i]))
-    
-    second = 0
-    while True:
+s, x, y = map(int, input().split())
+
+dx = [1, -1, 0, 0]
+dy = [0, 0, -1, 1]
+
+while q:
+
+    virus, t, xx, yy = q.popleft()
+
+    if t == s:
+        break
+
+    for i in range(4):
+
+        nx = xx + dx[i]
+        ny = yy + dy[i]
+
+        if nx < 0 or nx >= n or ny < 0 or ny >= n:
+            continue
+
+        if graph[nx][ny] != 0:
+            continue
         
-        second += 1
+        graph[nx][ny] = virus
+        q.append((virus, t+1, nx, ny))
         
-        for i in range(K):
-            queue = queues[i]
-            
-            if len(queue) == 0:
-                continue
-            
-            x, y = queue.popleft()
-            
-            for dx, dy in zip(dxs, dys):
-                
-                xx = x + dx
-                yy = y + dy
-            
-                if xx < 0 or xx >= N or yy < 0 or yy >= N:
-                    continue
-                    
-                if graph[xx][yy] != 0:
-                    continue
-                    
-                graph[xx][yy] = i + 1
-                
-                queue.append((xx, yy))
-        
-        cnt = 0
-        for i in range(K):
-            
-            cnt += len(queues[i])
-            
-        if cnt == 0:
-            break
-        
-        if second == S:
-            print(graph[X-1][Y-1])
-            break
-            
-search()
+print(graph[x-1][y-1])
 
 ## 예시 답안 ##
 
