@@ -2,6 +2,63 @@
 
 ## 나의 답안 ##
 
+n, l, r = map(int, input().split())
+
+graph = []
+for _ in range(n):
+    graph.append(list(map(int, input().split())))
+
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
+
+def dfs(x, y):
+    
+    global graph, union, total_number, sumed_value
+    
+    sumed_value += graph[x][y]
+    total_number += 1
+
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+
+        if nx >= 0 and nx < n and ny >= 0 and ny < n:
+            diff = abs(graph[x][y] - graph[nx][ny])
+            if diff >= l and diff <= r:
+                if union[nx][ny] == 0:
+                    union[nx][ny] = union[x][y]
+                    dfs(nx, ny)
+
+result = 0
+while True:
+    
+    union = [[0] * n for _ in range(n)]
+    values = []
+    
+    union_num = 1
+    total_number = 0
+    sumed_value = 0
+    for i in range(n):
+        for j in range(n):
+            if union[i][j] == 0:
+                union[i][j] = union_num
+                dfs(i, j)
+                values.append(sumed_value // total_number)
+                union_num += 1
+                total_number = 0
+                sumed_value = 0
+                                
+    for i in range(n):
+        for j in range(n):
+            graph[i][j] = values[union[i][j]-1]
+        
+    if len(values) == (n**2):
+        break
+    else:
+        result += 1
+        
+print(result)
+
 ## 예시 답안 ##
 
 from collections import deque
