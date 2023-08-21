@@ -2,16 +2,16 @@
 
 ## 나의 답안 ##
 
-N = int(input())
+n = int(input())
 
-data = []
-for _ in range(N):
-    data.append(int(input()))
+array = []
+for _ in range(n):
+    array.append(int(input()))
 
-data.sort(reverse=True)
+array.sort(reverse=True)
 
-for d in data:
-    print(d, end=' ')
+for i in range(len(array)):
+    print(array[i], end=' ')
 
 ## 예시 답안 ##
 
@@ -23,5 +23,5 @@ for _ in range(n):
 
 array = sorted(array, reverse=True)
 
-for i in data:
+for i in array:
     print(i, end=' ')

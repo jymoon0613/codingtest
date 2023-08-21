@@ -2,18 +2,22 @@
 
 ## 나의 답안 ##
 
-N, K = map(int, input().split())
-A = list(map(int, input().split()))
-B = list(map(int, input().split()))
+n, k = map(int, input().split())
+a = list(map(int, input().split()))
+b = list(map(int, input().split()))
 
-A = sorted(A)
-B = sorted(B, reverse=True)
+a.sort()
+b.sort(reverse=True)
 
-for i in range(K):
-    if A[i] < B[i]:
-        A[i] = B[i]
-    
-print(sum(A))
+cnt = 0
+for i in range(n):
+    if a[i] < b[i]:
+        a[i], b[i] = b[i], a[i]
+        cnt += 1
+    if cnt >= k:
+        break
+
+print(sum(a))
 
 ## 예시 답안 ##
 

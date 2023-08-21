@@ -2,37 +2,47 @@
 
 ## 나의 답안 ##
 
-N = int(input())
+import json
 
-stages = list(map(int, input().split()))
+n = int(input())
 
-stages.sort()
+stages = input()
+stages = json.loads(stages)
 
-res = []
-for i in range(1, N+1):
-    u = 0
-    d = 0
-    for j in stages:
-        if i == j:
-            u += 1
-        if i <= j:
-            d += 1
-            
-    res.append((u/d, i))
+def solution(n, stages):
 
-res.sort(key=lambda x: x[0], reverse=True)
+    result = []
 
-l = []
-for r in res:
-    l.append(r[1])
-    
-print(l)
+    total = len(stages)
+
+    for i in range(1, n+1):
+
+        value = stages.count(i)
+
+        if total == 0:
+            fail = 0
+        else:
+            fail = value / total
+
+        result.append((i, fail))
+        total -= value
+
+    result.sort(key=lambda x: x[1], reverse=True)
+
+    result = [i[0] for i in result]
+
+    print(result)
+
+print(solution(n, stages))
 
 ## 예시 답안 ##
 
+import json
+
 N = int(input())
 
-stages = list(map(int, input().split()))
+stages = input()
+stages = json.loads(stages)
 
 def solution(N, stages):
     answer = []

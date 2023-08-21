@@ -2,28 +2,14 @@
 
 ## 나의 답안 ##
 
-N = int(input())
+n = int(input())
+array = list(map(int, input().split()))
 
-houses = list(map(int, input().split()))
+array.sort()
 
-houses.sort()
+ind = int((len(array) - 1) / 2)
 
-all_dist = []
-for i in houses:
-    dist = []
-    for j in houses:
-        dist.append(abs(i-j))
-    all_dist.append(sum(dist))
-    
-m = 1e+9
-res = 0
-for i in range(len(all_dist)):
-    print(m)
-    if all_dist[i] < m:
-        m = all_dist[i]
-        res = i
-
-print(houses[res])
+print(array[ind])
 
 ## 예시 답안 ##
 

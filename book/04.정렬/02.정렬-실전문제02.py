@@ -2,17 +2,17 @@
 
 ## 나의 답안 ##
 
-N = int(input())
+n = int(input())
 
 array = []
-for _ in range(N):
-    A, B = input().split()
-    array.append((A, int(B)))
-    
+for _ in range(n):
+    name, score = input().split()
+    array.append((name, int(score)))
+
 array.sort(key=lambda x: x[1])
 
-for i in array:
-    print(i[0], end=' ')
+for i in range(n):
+    print(array[i][0], end=' ')
 
 ## 예시 답안 ##
 

@@ -2,31 +2,34 @@
 
 ## 나의 답안 ##
 
-N = int(input())
+n = int(input())
 
-data = []
-for _ in range(N):
-    data.append(int(input()))
-    
-data.sort()
-res = 0
+array = []
+for _ in range(n):
+    array.append(int(input()))
 
-while True:
+array.sort()
+accumulated = 0
+def solution(array):
 
-    new_data = []
-    for i in range(0, len(data), 2):
-        part = data[i:i+2]
-        
-        if len(part) == 2:
-            res += sum(part)
-        
-        new_data.append(sum(part))
-        
-    if len(new_data) == 1:
-        break
-        
-    else:
-        data = new_data
+    global accumulated
+
+    if len(array) <= 2:
+        if len(array) == 2:
+            accumulated += sum(array)
+            return sum(array)
+        else:
+            return sum(array)
+
+    point = (len(array) - 1) // 2
+
+    return solution(array[:point+1]) + solution(array[point+1:])
+
+last = solution(array)
+
+result = last + accumulated
+
+print(result)
 
 ## 예시 답안 ##
 

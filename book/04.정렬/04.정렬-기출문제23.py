@@ -2,17 +2,17 @@
 
 ## 나의 답안 ##
 
-N = int(input())
+n = int(input())
 
 array = []
-for i in range(N):
-    input_data = input().split()
-    array.append((input_data[0], -int(input_data[1]), int(input_data[2]), -int(input_data[3])))
-    
-array.sort(key=lambda x: (x[1], x[2], x[3], [ord(i) for i in x[0]]))
+for _ in range(n):
+    name, kor, eng, mat = input().split()
+    array.append((-int(kor), int(eng), -int(mat), name))
 
-for i in range(N):
-    print(array[i][0])
+array.sort()
+
+for i in range(n):
+    print(array[i][-1])
 
 ## 예시 답안 ##
 
