@@ -2,37 +2,36 @@
 
 ## 나의 답안 ##
 
-N = int(input())
-items = list(map(int, input().split()))
-M = int(input())
-targets = list(map(int, input().split()))
+n = int(input())
 
-items.sort()
+data = list(map(int, input().split()))
 
-def search(array, target, start, end):
+m = int(input())
+
+item = list(map(int, input().split()))
+
+data.sort()
+
+def binary_search(data, target, start, end):
     if start > end:
-        return None
+        return False
     
     mid = (start + end) // 2
-    
-    if array[mid] == target:
-        return mid
-    
-    elif array[mid] > target:
-        return search(array, target, start, mid-1)
-    
-    else:
-        return search(array, target, mid+1, end)
 
-res = []
-for t in targets:
-    if search(items, t, 0, N-1) == None:
-        res.append('no')
+    if data[mid] == target:
+        return True
     
+    elif data[mid] < target:
+        return binary_search(data, target, mid+1, end)
     else:
-        res.append('yes')
-        
-print(' '.join(res))
+        return binary_search(data, target, start, mid-1)
+
+for i in range(m):
+
+    if binary_search(data, item[i], 0, n-1):
+        print('yes', end=' ')
+    else:
+        print('no', end=' ')
 
 ## 예시 답안 ##
 

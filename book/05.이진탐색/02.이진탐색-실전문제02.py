@@ -2,39 +2,33 @@
 
 ## 나의 답안 ##
 
-def check(array, target):
-    res = 0
-    for a in array:
-        if a < target:
-            continue
-        else:
-            res += a - target
-            
-    return res
-
-def search(array, target, start, end):
-    
-    if start > end:
-        return None
-    
-    mid = (start + end) // 2
-    
-    if check(array, mid) == target:
-        return mid
-    
-    elif check(array, mid) < target:
-        return search(array, target, start, mid-1)
-        
-    else:
-        return search(array, target, mid+1, end)
-    
 n, m = map(int, input().split())
-
 array = list(map(int, input().split()))
+
+start = 0
+end = max(array)
 
 array.sort()
 
-search(array, m, 0, array[-1])
+result = None
+while start <= end:
+
+    mid = (start + end) // 2
+
+    total = 0
+    for x in array:
+        if x <= mid:
+            continue
+        else:
+            total += (x - mid)
+
+    if total >= m:
+        result = mid
+        start = mid + 1
+    else:
+        end = mid - 1
+
+print(result)
 
 ## 예시 답안 ##
 

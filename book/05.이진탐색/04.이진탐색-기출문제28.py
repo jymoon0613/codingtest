@@ -8,20 +8,24 @@ array = list(map(int, input().split()))
 
 def search(array, start, end):
     if start > end:
-        return -1
+        return None
     
     mid = (start + end) // 2
-    
+
     if array[mid] == mid:
         return mid
-
-    elif array[mid] > mid:
+    
+    elif array[mid] < mid:
+        return search(array, mid+1, end)
+    else:
         return search(array, start, mid-1)
     
-    else:
-        return search(array, mid+1, end)
-    
-print(search(array, 0, n-1))
+result = search(array, 0, n-1)
+
+if result == None:
+    print(-1)
+else:
+    print(result)
 
 ## 예시 답안 ##
 
