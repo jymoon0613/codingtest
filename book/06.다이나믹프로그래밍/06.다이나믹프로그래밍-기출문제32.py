@@ -7,27 +7,28 @@ n = int(input())
 array = []
 for _ in range(n):
     array.append(list(map(int, input().split())))
-    
-result = []
-result.append(array[0])
-for i in range(len(array)-1):
-    
-    l = len(array[i]) + 1
-    r = []
-    
-    for j in range(l):
+
+d = [[0] * i for i in range(1,n+1)]
+
+d[0][0] = array[0][0]
+
+result = -1
+
+for i in range(1, n):
+    for j in range(len(d[i])):
         if j == 0:
-            r.append(result[i][j] + array[i+1][j])
-        elif j == (l-1):
-            r.append(result[i][j-1] + array[i+1][j])
+            left = 0
         else:
-            left = result[i][j-1] + array[i+1][j]
-            right = result[i][j] + array[i+1][j]
-            r.append(max(left, right))
-            
-    result.append(r)
-    
-print(max(result[-1]))
+            left = d[i-1][j-1]
+        if j == (len(d[i]) - 1):
+            right = 0
+        else:
+            right = d[i-1][j]
+
+        d[i][j] = array[i][j] + max(left, right)
+        result = max(result, d[i][j])
+
+print(result)
 
 ## 예시 답안 ##
 
