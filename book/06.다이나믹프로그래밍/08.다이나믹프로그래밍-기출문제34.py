@@ -6,18 +6,17 @@ n = int(input())
 
 array = list(map(int, input().split()))
 
-dp = [0] * n
-dp[0] = array[0]
+array.reverse()
 
-cnt = 0
+d = [1] * n
+
 for i in range(1, n):
-    if array[i] < dp[i-1]:
-        dp[i] = array[i]
-    else:
-        dp[i] = array[i]
-        cnt += 1
-        
-print(cnt)
+    for j in range(0, i):
+        if array[i] > array[j]:
+            d[i] = max(d[i], d[j]+1)
+
+print(d)
+print(n - max(d))
 
 ## 예시 답안 ##
 
