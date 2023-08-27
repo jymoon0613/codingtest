@@ -4,44 +4,49 @@
 
 import heapq
 
-INF = int(1e+9)
-
 n, m = map(int, input().split())
-
-distance = [INF] * (n+1)
 
 graph = [[] for _ in range(n+1)]
 for _ in range(m):
     a, b = map(int, input().split())
     graph[a].append((1, b))
     graph[b].append((1, a))
-    
-start = 1
-q = [(0, start)]
-distance[start] = 0
+
+INF = int(1e+9)
+
+distance = [INF] * (n+1)
+
+q = [(0, 1)]
+
+distance[1] = 0
 
 while q:
-    
-    dist, now = heapq.heappop(q)
-    
-    if distance[now] < dist:
+
+    dist, next = heapq.heappop(q)
+
+    if distance[next] < dist:
         continue
-    
-    for i in graph[now]:
-        cost = dist + i[0]
-        
-        if cost < distance[i[1]]:
-            distance[i[1]] = cost
-            heapq.heappush(q, (cost, i[1]))
-            
+
+    for x in graph[next]:
+
+        cost = x[0] + dist
+
+        if cost < distance[x[1]]:
+            distance[x[1]] = cost
+            heapq.heappush(q, (cost, x[1]))
+
 max_value = -1
-ind = None
-for i in range(1, n+1):
+ind = 0
+cnt = 0
+for i in range(2, n+1):
+    if distance[i] == max_value:
+        cnt += 1
     if distance[i] > max_value:
         max_value = distance[i]
         ind = i
-        
-print(ind, max_value, distance.count(max_value))
+        cnt = 1
+
+print(ind, max_value, cnt)
 
 ## 예시 답안 ##
 

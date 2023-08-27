@@ -6,47 +6,43 @@ import heapq
 
 INF = int(1e+9)
 
-def search(start):
-
-    q = []
-
-    heapq.heappush(q, (graph[start[0]][start[1]], start))
-
-    distance[start[0]][start[1]] = graph[start[0]][start[1]]
-
-    while q:
-
-        dist, now = heapq.heappop(q)
-
-        if distance[now[0]][now[1]] < dist:
-            continue
-
-        for i in range(4):
-            nx = now[0] + dx[i]
-            ny = now[1] + dy[i]
-
-            if nx < n and nx >= 0 and ny < n and ny >= 0:
-                cost = dist + graph[nx][ny]
-
-                if cost < distance[nx][ny]:
-                    distance[nx][ny] = cost
-                    heapq.heappush(q, (cost, (nx, ny)))
-
-
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
-
 for t in range(int(input())):
-
     n = int(input())
-
-    distance = [[INF] * n for _ in range(n)]
 
     graph = []
     for _ in range(n):
         graph.append(list(map(int, input().split())))
 
-    search((0, 0))
+    q = []
+
+    heapq.heappush(q, (graph[0][0], 0, 0))
+
+    distance = [[INF] * n for _ in range(n)]
+
+    distance[0][0] = graph[0][0]
+
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+
+    result = 0
+    while q:
+
+        c, x, y = heapq.heappop(q)
+
+        if distance[x][y] < c:
+            continue
+
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+
+            if nx >= 0 and nx < n and ny >= 0 and ny < n:
+                
+                cost = c + graph[nx][ny]
+
+                if cost < distance[nx][ny]:
+                    distance[nx][ny] = cost
+                    heapq.heappush(q, (cost, nx, ny))
 
     print(distance[n-1][n-1])
 
