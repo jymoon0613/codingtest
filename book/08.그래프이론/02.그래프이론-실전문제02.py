@@ -14,31 +14,32 @@ def union_parent(parent, a, b):
         parent[b] = a
     else:
         parent[a] = b
-        
+
 n, m = map(int, input().split())
+
 parent = [0] * (n+1)
-
-edges = []
-result = 0
-
 for i in range(1, n+1):
     parent[i] = i
-    
-for i in range(m):
-    a, b, cost = map(int, input().split())
-    edges.append((cost, a, b))
-    
+
+edges = []
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    edges.append((c, a, b))
+
 edges.sort()
 
-max_cost = -1
-for edge in edges:
-    cost, a, b = edge
+result = 0
+last = 0
+for i in range(m):
+    
+    c, a, b = edges[i]
+
     if find_parent(parent, a) != find_parent(parent, b):
         union_parent(parent, a, b)
-        result += cost
-        max_cost = max(max_cost, cost)
-        
-print(result - max_cost)
+        result += c
+        last = c
+
+print(result-last)
 
 ## 예시 답안 ##
 
