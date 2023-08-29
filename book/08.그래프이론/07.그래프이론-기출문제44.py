@@ -14,36 +14,41 @@ def union_parent(parent, a, b):
         parent[b] = a
     else:
         parent[a] = b
-        
+
 n = int(input())
 
-nodes = []
-
 parent = [0] * (n+1)
-
 for i in range(1, n+1):
     parent[i] = i
-    
-for _ in range(n):
-    x, y, z = map(int, input().split())
-    nodes.append((x, y, z))
-    
-res = 0
-groups = []
+
+xs, ys, zs = [], [], []
 for i in range(1, n+1):
-    node = nodes[i-1]
-    parent[i] = -1
-    if len(groups) != 0:
-        min_dist = int(1e+9)
-        for g in groups:
-            nx, ny, nz = g
-            x, y, z = node
-            dist = min(abs(nx-x), abs(ny-y), abs(nz-z))
-            min_dist = min(dist, min_dist)
-        res += min_dist
-    groups.append(node)
-    
-print(res)
+    x, y, z = map(int, input().split())
+    xs.append((x, i))
+    ys.append((y, i))
+    zs.append((z, i))
+
+xs.sort()
+ys.sort()
+zs.sort()
+
+edges = []
+for i in range(n-1):
+    edges.append((abs(xs[i+1][0]-xs[i][0]), xs[i][1], xs[i+1][1]))
+    edges.append((abs(ys[i+1][0]-ys[i][0]), ys[i][1], ys[i+1][1]))
+    edges.append((abs(zs[i+1][0]-zs[i][0]), zs[i][1], zs[i+1][1]))
+
+edges.sort()
+
+result = 0
+for edge in edges:
+    z, x, y = edge
+
+    if find_parent(parent, x) != find_parent(parent, y):
+        union_parent(parent, x, y)
+        result += z
+
+print(result)
 
 ## 예시 답안 ##
 

@@ -19,27 +19,27 @@ n, m = map(int, input().split())
 
 parent = [0] * (n+1)
 
-edges = []
-result = 0
-
 for i in range(1, n+1):
     parent[i] = i
-    
+
+edges = []
 total = 0
 for _ in range(m):
-    a, b, cost = map(int, input().split())
-    edges.append((cost, a, b))
-    total += cost
-    
+    x, y, z = map(int, input().split())
+    edges.append((z, x, y))
+    total += z
+
 edges.sort()
 
 for edge in edges:
-    cost, a, b = edge
-    if find_parent(parent, a) != find_parent(parent, b):
-        union_parent(parent, a, b)
-        result += cost
-        
-print(total - result)
+
+    z, x, y = edge
+
+    if find_parent(parent, x) != find_parent(parent, y):
+        union_parent(parent, x, y)
+        total -= z
+
+print(total)
 
 ## 예시 답안 ##
 
