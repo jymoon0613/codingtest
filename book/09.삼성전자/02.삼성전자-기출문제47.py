@@ -2,6 +2,93 @@
 
 ## 나의 답안 ##
 
+import copy
+
+array = [[] for _ in range(4)]
+
+all_fishes = []
+
+for i in range(4):
+    data = list(map(int, input().split()))
+    for step in range(0, 8, 2):
+        a, b = data[step:step+2]
+        array[i].append([a, b-1])
+
+dx = [-1, -1, 0, 1, 1, 1, 0, -1]
+dy = [0, -1, -1, -1, 0, 1, 1, 1]
+
+def find_fish(array, num):
+
+    for i in range(4):
+        for j in range(4):
+            if array[i][j][0] == num:
+                return (i, j)
+            
+    return None
+
+def move_fishes(array, sx, sy):
+
+    for fish_num in range(1, 17):
+        
+        position = find_fish(array, fish_num)
+
+        if position != None:
+
+            fx, fy = position
+        
+            fd = array[fx][fy][1]
+
+            for i in range(8):
+
+                nx = fx + dx[fd]
+                ny = fy + dy[fd]
+
+                if nx >= 0 and nx < 4 and ny >= 0 and ny < 4:
+                    if (nx, ny) != (sx, sy):
+                        array[fx][fy][1] = fd
+                        array[fx][fy], array[nx][ny] = array[nx][ny], array[fx][fy]
+                        break
+
+                fd = (fd + 1) % 8
+
+def get_possible_positions(array, x, y):
+    positions = []
+    direction = array[x][y][1]
+    
+    for i in range(4):
+        x += dx[direction]
+        y += dy[direction]
+        
+        if 0 <= x and x < 4 and 0 <= y and y < 4:
+            if array[x][y][0] != -1:
+                positions.append((x, y))
+                
+    return positions
+
+result = 0
+def dfs(array, x, y, total):
+
+    global result
+
+    array = copy.deepcopy(array)
+
+    total += array[x][y][0]
+    array[x][y][0] = -1
+
+    move_fishes(array, x, y)
+
+    positions = get_possible_positions(array, x, y)
+
+    if len(positions) == 0:
+        result = max(result, total)
+        return
+    
+    for nx, ny in positions:
+        dfs(array, nx, ny, total)
+
+dfs(array, 0, 0, 0)
+print(result)
+
 ## 예시 답안 ##
 
 import copy

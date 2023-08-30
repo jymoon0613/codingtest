@@ -2,6 +2,102 @@
 
 ## 나의 답안 ##
 
+from collections import deque
+
+n = int(input())
+
+all_fishes = []
+array = []
+for i in range(n):
+    array.append(list(map(int, input().split())))
+    for j in range(n):
+        if array[i][j] == 9:
+            sx, sy, ss = i, j, 2
+        elif array[i][j] != 0:
+            all_fishes.append((array[i][j], i, j))
+        else:
+            continue
+
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
+
+def bfs(array, shark, fish, ss):
+    
+    time_table = [[0] * n for _ in range(n)]
+
+    sx, sy = shark
+
+    fx, fy = fish
+
+    q = deque()
+
+    q.append((sx, sy))
+
+    while q:
+
+        x, y = q.popleft()
+
+        if x == fx and y == fy:
+
+            return time_table[x][y]
+        
+        for i in range(4):
+
+            nx = x + dx[i]
+            ny = y + dy[i]
+
+            if nx < 0 or nx >= n or ny < 0 or ny >= n:
+                continue
+            
+            if array[nx][ny] > ss:
+                continue
+
+            if time_table[nx][ny] == 0: 
+
+                time_table[nx][ny] = time_table[x][y] + 1
+                q.append((nx, ny))
+
+    return -1
+
+def get_fishes(all_fishes, shark):
+
+    fishes = [fish for fish in all_fishes if fish[0] < shark[0]]
+
+    if len(fishes) >= 2:
+        fishes.sort(key=lambda x: abs(x[1]-shark[1]) + abs(x[2]-shark[2]))
+
+    return fishes
+
+result = 0
+ate = 0
+while True:
+
+    fishes = get_fishes(all_fishes, (ss, sx, sy))
+
+    if len(fishes) == 0:
+        break
+
+    fs, fx, fy = fishes[0]
+
+    time = bfs(array, (sx, sy), (fx, fy), ss)
+
+    result += time
+
+    array[fx][fy] = 0
+    array[sx][sy] = 0
+
+    sx, sy = fx, fy
+
+    all_fishes.remove((fs, fx, fy))
+
+    ate += 1
+
+    if ate == ss:
+        ate = 0
+        ss += 1
+
+print(result)
+
 ## 예시 답안 ##
 
 from collections import deque
