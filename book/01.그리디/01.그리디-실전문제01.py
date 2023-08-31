@@ -2,7 +2,7 @@
 
 ## 나의 답안 ##
 
-n, m, k  = map(int, input().split())
+n, m, k = map(int, input().split())
 
 array = list(map(int, input().split()))
 
@@ -11,13 +11,7 @@ array.sort(reverse=True)
 num1 = array[0]
 num2 = array[1]
 
-result = 0
-for i in range(m):
-    if (i+1) % k == 0:
-        result += num2
-
-    else:
-        result += num1
+result = (m // (k + 1)) * (num1 * k + num2) + (m % (k + 1)) * num1
 
 print(result)
 

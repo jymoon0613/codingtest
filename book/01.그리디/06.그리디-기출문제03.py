@@ -2,25 +2,22 @@
 
 ## 나의 답안 ##
 
-nums = input()
+array = list(map(int, input()))
 
-cnt_0 = 0
-cnt_1 = 0
+num0 = 0
+num1 = 0
+for i in range(len(array)-1):
+    if array[i] == 0 and array[i+1] == 1:
+        num0 += 1
+    if array[i] == 1 and array[i+1] == 0:
+        num1 += 1
 
-for i in range(len(nums)-1):
-    if nums[i] == '0' and (nums[i] != nums[i+1]):
-        cnt_0 += 1
-    elif nums[i] == '1' and (nums[i] != nums[i+1]):
-        cnt_1 += 1
-    else: 
-        continue
-
-if nums[-1] == '1':
-    cnt_1 += 1
+if array[-1] == 0:
+    num0 += 1
 else:
-    cnt_0 += 1
+    num1 += 1
 
-print(min(cnt_0, cnt_1))
+print(min(num0, num1))
 
 ## 예시 답안 ##
 

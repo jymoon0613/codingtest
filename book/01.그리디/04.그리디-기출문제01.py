@@ -3,20 +3,19 @@
 ## 나의 답안 ##
 
 n = int(input())
-data = list(map(int, input().split()))
 
-data.sort()
-result = 0
+array = list(map(int, input().split()))
+
+array.sort()
+
 cnt = 0
-
+result = 0
 for i in range(n):
-
     cnt += 1
-
-    if cnt >= i:
+    if cnt == array[i]:
         result += 1
         cnt = 0
-    
+        
 print(result)
 
 ## 예시 답안 ##

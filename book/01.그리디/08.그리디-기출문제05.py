@@ -3,17 +3,19 @@
 ## 나의 답안 ##
 
 n, m = map(int, input().split())
+
 k = list(map(int, input().split()))
 
-array = [0] * n
+table = [0] * (m+1)
 
 for i in k:
-    array[i-1] += 1
+    table[i] += 1
 
+total = sum(table)
 result = 0
-for i in range(m):
-    n -= array[i]
-    result += array[i] * n
+for i in table:
+    result += i * (total - i)
+    total -= i
 
 print(result)
 

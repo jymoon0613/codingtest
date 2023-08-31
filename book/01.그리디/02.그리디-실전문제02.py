@@ -4,19 +4,13 @@
 
 n, m = map(int, input().split())
 
-max_num = -1
+max_value = -1
 for i in range(n):
-    data = list(map(int, input().split()))
-    min_num = int(1e+9)
-    for j in range(m):
-        if data[j] < min_num:
-            min_num = data[j]
+    row = list(map(int, input().split()))
+    min_value = min(row)
+    max_value = max(min_value, max_value)
 
-
-    if min_num > max_num:
-        max_num = min_num
-
-print(max_num)
+print(max_value)
 
 ## 예시 답안 ##
 

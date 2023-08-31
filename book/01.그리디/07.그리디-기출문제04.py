@@ -3,18 +3,19 @@
 ## 나의 답안 ##
 
 n = int(input())
-data = list(map(int, input().split()))
 
-data.sort()
-result = 1
+array = list(map(int, input().split()))
 
-for d in data:
-    if d > result:
+array.sort()
+
+target = 1
+for i in range(n):
+    if target < array[i]:
         break
     else:
-        result += d
+        target += array[i]
 
-print(result)
+print(target)
 
 ## 예시 답안 ##
 

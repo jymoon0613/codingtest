@@ -2,17 +2,14 @@
 
 ## 나의 답안 ##
 
-s = input()
+array = list(map(int, input()))
 
-result = int(s[0])
-
-for i in range(1, len(s)):
-    num = int(s[i])
-
-    if result <= 1 or num <= 1:
-        result += num
-    else :
-        result *= num
+result = array[0]
+for i in range(1, len(array)):
+    if result <= 1 or array[i] <= 0:
+        result += array[i]
+    else:
+        result *= array[i]
 
 print(result)
 
