@@ -2,12 +2,12 @@
 
 ## 나의 답안 ##
 
-N = input()
+n = input()
 
-h = len(N) // 2
+h = len(n) // 2
 
-l = list(N[:h])
-r = list(N[h:])
+l = list(n[:h])
+r = list(n[h:])
 
 l_sum = sum([int(i) for i in l])
 r_sum = sum([int(i) for i in r])
