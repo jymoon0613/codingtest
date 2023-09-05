@@ -2,65 +2,74 @@
 
 ## 나의 답안 ##
 
+from collections import deque
+
 n = int(input())
-
-array = [[0] * n for _ in range(n)]
-
 k = int(input())
 
+array = [[0] * (n) for _ in range(n)]
+
+array[0][0] = 2
+
 for _ in range(k):
-    x, y = map(int, input().split())
-    array[x-1][y-1] = 1
+    a, b = map(int, input().split())
+    array[a-1][b-1] = 1
 
 l = int(input())
 
 directions = []
 for _ in range(l):
-    t, d = input().split()
-    directions.append((int(t), d))
+    
+    x, c = input().split()
+
+    directions.append((int(x), c))
 
 dx = [0, 1, 0, -1]
 dy = [1, 0, -1, 0]
 
-xs, ys, ds = 0, 0, 0
+x, y, d = 0, 0, 0
+array[x][y] = 2
+q = deque()
+q.append((x, y))
 
-snakes = []
-array[xs][ys] = 2
-snakes.append((xs, ys))
-
-end = False
-result = 0
+time = directions[0][0]
 ind = 0
-t, d_next = directions[0]
+
+result = 0
 while True:
 
     result += 1
 
-    nx = xs + dx[ds]
-    ny = ys + dy[ds]
+    nx = x + dx[d]
+    ny = y + dy[d]
 
     if nx < 0 or nx >= n or ny < 0 or ny >= n or array[nx][ny] == 2:
-        end = True
         break
+
+    if array[nx][ny] == 1:
+        array[nx][ny] = 2
+
     else:
-        if array[nx][ny] == 1:
-            array[nx][ny] = 2
-        else:
-            array[nx][ny] = 2
-            x, y = snakes.pop(0)
-            array[x][y] = 0
+        array[nx][ny] = 2
 
-    xs, ys = nx, ny
-    snakes.append((xs, ys))
+        px, py = q.popleft()
+        array[px][py] = 0
 
-    if ind < l and result == directions[ind][0]:
+    x = nx
+    y = ny
+    q.append((nx, ny))
+
+    if result == time:
 
         if directions[ind][1] == 'D':
-            ds = (ds + 1) % 4
+            d = (d + 1) % 4
         else:
-            ds = (ds + 3) % 4
+            d = (d + 3) % 4
 
         ind += 1
+
+        if ind < l:
+            time = directions[ind][0]
 
 print(result)
 
