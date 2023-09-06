@@ -4,42 +4,40 @@
 
 from itertools import combinations
 
-def cal(candidate, hs):
-    result = []
-    for i in range(len(hs)):
-        hx, hy = hs[i]
-        m = int(1e+9)
-        for cx, cy in candidate:
-            diff = abs(hx - cx) + abs(hy - cy)
-            if diff < m:
-                m = diff
-
-        result.append(m)
-
-    return sum(result)
-
 n, m = map(int, input().split())
 
-hs = []
-cs = []
+array = []
+
+chickens = []
+houses = []
 for i in range(n):
-    array = list(map(int, input().split()))
+    array.append(list(map(int, input().split())))
     for j in range(n):
-        if array[j] == 1:
-            hs.append((i, j))
-        elif array[j] == 2:
-            cs.append((i, j))
-        else:
-            continue
+        if array[i][j] == 2:
+            chickens.append((i,j))
+        if array[i][j] == 1:
+            houses.append((i,j))
 
-candidates = combinations(cs, m)
+candidates = combinations(chickens, m)
 
-res = []
+result = int(1e+9)
 for candidate in candidates:
 
-    res.append(cal(candidate, hs))
+    sum_value = 0
+    for house in houses:
 
-print(min(res))
+        min_dist = int(1e+9)
+        for chicken in candidate:
+
+            dist = abs(house[0] - chicken[0]) + abs(house[1] - chicken[1])
+
+            min_dist = min(min_dist, dist)
+
+        sum_value += min_dist
+
+    result = min(result, sum_value)
+
+print(result)
 
 ## 예시 답안 ##
 

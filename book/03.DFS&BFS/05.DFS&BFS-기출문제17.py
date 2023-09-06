@@ -2,47 +2,40 @@
 
 ## 나의 답안 ##
 
-from collections import deque
+import heapq
 
 n, k = map(int, input().split())
 
 graph = []
-q = []
+virus = []
 for i in range(n):
     graph.append(list(map(int, input().split())))
     for j in range(n):
         if graph[i][j] != 0:
-            q.append((graph[i][j], 0, i, j))
-
-q.sort(key=lambda x: x[0])
-q = deque(q)
+            heapq.heappush(virus, (0, graph[i][j], i, j))
 
 s, x, y = map(int, input().split())
 
-dx = [1, -1, 0, 0]
+dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-while q:
+while virus:
 
-    virus, t, xx, yy = q.popleft()
+    t, v, vx, vy = heapq.heappop(virus)
 
-    if t == s:
+    if t >= s:
         break
 
     for i in range(4):
 
-        nx = xx + dx[i]
-        ny = yy + dy[i]
+        nx = vx + dx[i]
+        ny = vy + dy[i]
 
-        if nx < 0 or nx >= n or ny < 0 or ny >= n:
-            continue
+        if nx >= 0 and nx < n and ny >= 0 and ny < n:
+            if graph[nx][ny] == 0:
+                graph[nx][ny] = v
+                heapq.heappush(virus, (t+1, v, nx, ny))
 
-        if graph[nx][ny] != 0:
-            continue
-        
-        graph[nx][ny] = virus
-        q.append((virus, t+1, nx, ny))
-        
 print(graph[x-1][y-1])
 
 ## 예시 답안 ##

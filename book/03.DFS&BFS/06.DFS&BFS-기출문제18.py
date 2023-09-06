@@ -2,83 +2,65 @@
 
 ## 나의 답안 ##
 
-from collections import deque
+def is_balance(string):
 
-p = input()
-
-def is_balance(p):
-    
-    cnt0 = 0
-    cnt1 = 0
-
-    for s in p:
+    cnt = 0
+    for s in string:
         if s == '(':
-            cnt0 += 1
+            cnt += 1
         else:
-            cnt1 += 1
+            cnt -= 1
 
-    if cnt0 == cnt1:
-        return True
+    if cnt != 0:
+        return False
     else:
-        return False
+        return True
     
-def is_correct(p):
+def is_proper(string):
 
-    if not is_balance(p):
-    
-        return False
-
-    cnt0 = 0
-    cnt1 = 0
-
-    for s in p:
-
+    cnt = 0
+    for s in string:
         if s == '(':
-            cnt0 += 1
+            cnt += 1
         else:
-            cnt1 += 1
+            cnt -= 1
 
-        if (cnt0 - cnt1) < 0:
-
+        if cnt < 0:
             return False
         
     return True
 
-def solution(p):
+def solution(string):
 
     result = ''
 
-    if len(p) == 0:
-        
+    if len(string) == 0:
+
         return result
     
-    for i in range(1, len(p)+1):
+    for i in range(1, len(string)+1):
+        u = string[:i]
+        v = string[i:]
 
-        u = p[:i]
-        v = p[i:]
+        if is_balance(u): break
 
-        if is_balance(u):
-
-            break
-
-    if is_correct(u):
-
+    if is_proper(u): 
         result = u + solution(v)
-    
-    else:
 
-        result = '('
+    else:
+        result = ''
+        result += '('
         result += solution(v)
         result += ')'
-        u = list(u[1:-1])
-        for s in u:
-            if s =='(':
+        for uu in u[1:-1]:
+            if uu == '(':
                 result += ')'
             else:
                 result += '('
 
     return result
 
+p = input()
 print(solution(p))
 
 ## 예시 답안 ##

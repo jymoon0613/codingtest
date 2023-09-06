@@ -6,39 +6,43 @@ n = int(input())
 
 a = list(map(int, input().split()))
 
-add, sub, mul, div = list(map(int, input().split()))
+oper = list(map(int, input().split()))
 
-mini = int(1e9)
-maxi = int(-1e9)
+max_value = -int(1e+9)
+min_value = int(1e+9)
+def dfs(value, ind):
 
-def solution(ind, now):
+    global max_value, min_value
 
-    global a, add, sub, mul, div, mini, maxi
+    if ind >= n:
+        max_value = max(max_value, value)
+        min_value = min(min_value, value)
 
-    if ind == n:
-        mini = min(mini, now)
-        maxi = max(maxi, now)
+    else:
+        if oper[0] != 0:
+            oper[0] -= 1
+            dfs(value + a[ind], ind+1)
+            oper[0] += 1
+            
+        if oper[1] != 0:
+            oper[1] -= 1
+            dfs(value - a[ind], ind+1)
+            oper[1] += 1
 
-    if add >= 1:
-        add -= 1
-        solution(ind+1, now + a[ind])
-        add += 1
-    if sub >= 1:
-        sub -= 1
-        solution(ind+1, now - a[ind])
-        sub += 1
-    if mul >= 1:
-        mul -= 1
-        solution(ind+1, now * a[ind])
-        mul += 1
-    if div >= 1:
-        div -= 1
-        solution(ind+1, int(now / a[ind]))
-        div += 1
+        if oper[2] != 0:
+            oper[2] -= 1
+            dfs(value * a[ind], ind+1)
+            oper[2] += 1
 
-solution(1, a[0])
-print(maxi)
-print(mini)
+        if oper[3] != 0:
+            oper[3] -= 1
+            dfs(int(value / a[ind]), ind+1)
+            oper[3] += 1
+
+dfs(a[0], 1)
+
+print(max_value)
+print(min_value)
 
 ## 예시 답안 ##
 

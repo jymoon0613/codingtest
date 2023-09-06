@@ -2,81 +2,69 @@
 
 ## 나의 답안 ##
 
+import copy
+
 n = int(input())
 
 graph = []
-num_T = 0
-for i in range(n):
-    graph.append(list(input().split()))
-    for j in range(n):
-        if graph[i][j] == 'T':
-            num_T += 1
+for _ in range(n):
+    graph.append(input().split())
 
-graph_copy = [[0] * n for _ in range(n)]
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
 
-def check(graph, x, y, d):
+def check(graph, x, y):
 
-    if x < 0 or x >= n or y < 0 or y >= n:
-        return True
-    
-    if graph[x][y] == 'O':
-        return True
+    for i in range(4):
 
-    if graph[x][y] == 'S':
-        return False
-    
-    if d == 0:
-        if not check(graph, x+1, y, 0):
-            return False
+        nx, ny = x, y
 
-    if d == 1:
-        if not check(graph, x-1, y, 1):
-            return False
-        
-    if d == 2:
-        if not check(graph, x, y-1, 2):
-            return False
-        
-    if d == 3:
-        if not check(graph, x, y+1, 3):
-            return False
+        while True:
 
+            nx = nx + dx[i]
+            ny = ny + dy[i]
+
+            if nx < 0 or nx >= n or ny < 0 or ny >= n:
+
+                break
+
+            if graph[nx][ny] == 'O':
+
+                break
+
+            if graph[nx][ny] == 'S':
+
+                return False
+            
     return True
 
-
-def solution(cnt):
+def dfs(graph, cnt):
 
     if cnt == 3:
+        graph_copy = copy.deepcopy(graph)
         for i in range(n):
             for j in range(n):
-                graph_copy[i][j] = graph[i][j]
+                if graph_copy[i][j] == 'T':
+                    if not check(graph_copy, i, j):
+                        return False
+                    
+        return True
 
-        res = 0
+    else:
         for i in range(n):
-                for j in range(n):
-                    if graph_copy[i][j] == 'T':
-                        for k in range(4):
-                            if not check(graph_copy, i, j, k):
-                                return False
-                            
-                        res += 1
+            for j in range(n):
+                if graph[i][j] == 'X':
+                    graph[i][j] = 'O'
+                    cnt += 1
+                    if dfs(graph, cnt):
+                        return True
+                    graph[i][j] = 'X'
+                    cnt -= 1
 
-                        if res == num_T:
-                            return True
+        return False
 
-    for i in range(n):
-        for j in range(n):
-            if graph[i][j] == 'X':
-                cnt += 1
-                graph[i][j] = 'O'
-                if solution(cnt):
-                    return True
-                cnt -= 1
-                graph[i][j] = 'X'
-    
-    return False
+result = dfs(graph, 0)
 
-result = solution(0)
 if result:
     print('YES')
 else:

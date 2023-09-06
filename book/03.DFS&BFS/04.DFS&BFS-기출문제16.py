@@ -3,57 +3,62 @@
 ## 나의 답안 ##
 
 import copy
-from itertools import combinations
 
 n, m = map(int, input().split())
 
-array = []
-possibles = []
-for i in range(n):
-    array.append(list(map(int, input().split())))
-    for j in range(m):
-        if array[i][j] == 0:
-            possibles.append((i, j))
+graph = []
+for _ in range(n):
+    graph.append(list(map(int, input().split())))
 
-def calculate(array):
+def get_score(graph):
+
     result = 0
     for i in range(n):
         for j in range(m):
-            if array[i][j] == 0:
+            if graph[i][j] == 0:
                 result += 1
 
     return result
 
-def dfs(array, x, y):
+def virus(graph, x, y):
 
-    if x < 0 or x >= n or y < 0 or y >= m:
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
 
-        return False
-    
-    if array[x][y] == 0:
-        
-        array[x][y] = 2
+    for i in range(4):
 
-        dfs(array, x-1, y)
-        dfs(array, x+1, y)
-        dfs(array, x, y-1)
-        dfs(array, x, y+1)
+        nx = x + dx[i]
+        ny = y + dy[i]
 
-    return True
+        if nx >= 0 and nx < n and ny >= 0 and ny < m:
+            if graph[nx][ny] == 0:
+                graph[nx][ny] = 2
+                virus(graph, nx, ny)
 
-candidates = combinations(possibles, 3)
 result = -1
-for candidate in candidates:
-    array_copy = copy.deepcopy(array)
-    for x, y in candidate:
-        array_copy[x][y] = 1
-    for i in range(n):
-        for j in range(m):
-            if array_copy[i][j] == 2:
-                array_copy[i][j] = 0
-                dfs(array_copy, i, j)
+def dfs(graph, cnt):
 
-    result = max(result, calculate(array_copy))
+    global result
+
+    if cnt == 3:
+        graph_copy = copy.deepcopy(graph)
+        for i in range(n):
+            for j in range(m):
+                if graph_copy[i][j] == 2:
+                    virus(graph_copy, i, j)
+        result = max(result, get_score(graph_copy))
+
+    else:
+        for i in range(n):
+            for j in range(m):
+                if graph[i][j] == 0:
+                    graph[i][j] = 1
+                    cnt += 1
+                    dfs(graph, cnt)
+                    graph[i][j] = 0
+                    cnt -= 1
+
+dfs(graph, 0)
 
 print(result)
 
