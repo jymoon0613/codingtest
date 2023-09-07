@@ -2,32 +2,27 @@
 
 ## 나의 답안 ##
 
+import heapq
+
 n = int(input())
 
-array = []
+q = []
 for _ in range(n):
-    array.append(int(input()))
+    heapq.heappush(q, int(input()))
 
-array.sort()
-accumulated = 0
-def solution(array):
+result = 0
+while q:
 
-    global accumulated
+    if len(q) <= 1:
+        break
 
-    if len(array) <= 2:
-        if len(array) == 2:
-            accumulated += sum(array)
-            return sum(array)
-        else:
-            return sum(array)
+    x1 = heapq.heappop(q)
+    x2 = heapq.heappop(q)
 
-    point = (len(array) - 1) // 2
+    result += x1
+    result += x2
 
-    return solution(array[:point+1]) + solution(array[point+1:])
-
-last = solution(array)
-
-result = last + accumulated
+    heapq.heappush(q, x1+x2)
 
 print(result)
 

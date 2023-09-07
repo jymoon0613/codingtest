@@ -7,90 +7,80 @@ from collections import deque
 
 board = input()
 board = json.loads(board)
-        
-dx = [0, 0, 1, -1]
-dy = [1, -1, 0, 0]
-result = 0
-visited =[]
+
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
+
+def all_moves(board, robot):
+
+    result = []
+    
+    lx, ly, rx, ry = robot
+
+    for i in range(4):
+
+        nlx = lx + dx[i]
+        nly = ly + dy[i]
+        nrx = rx + dx[i]
+        nry = ry + dy[i]
+
+        if board[nlx][nly] != 1 and board[nrx][nry] != 1:
+            result.append((nlx, nly, nrx, nry))
+
+    if lx == rx:
+        if board[lx-1][ly] != 1 and board[rx-1][ry] != 1:
+            result.append((lx, ly, lx-1, ly))
+            result.append((rx, ry, rx-1, ry))
+        if board[lx+1][ly] != 1 and board[rx+1][ry] != 1:
+            result.append((rx+1, ry, rx, ry))
+            result.append((lx+1, ly, lx, ly))
+
+    if ly == ry:
+        if board[lx][ly-1] != 1 and board[rx][ry-1] != 1:
+            result.append((rx, ry-1, rx, ry))
+            result.append((lx, ly-1, lx, ly))
+        if board[lx][ly+1] != 1 and board[rx][ry+1] != 1:
+            result.append((rx, ry, rx, ry+1))
+            result.append((lx, ly, lx, ly+1))
+
+    return result
+
 def solution(board):
 
-    lx, ly, rx, ry, cnt = 0, 0, 0, 1, 0
+    board_new = [[1] * (len(board)+2) for _ in range(len(board)+2)]
+
+    for i in range(len(board)):
+        for j in range(len(board)):
+            board_new[i+1][j+1] = board[i][j]
+
+    cost = 0
+
+    robot = (cost, (1, 1, 1, 2))
 
     q = deque()
+    q.append(robot)
 
-    q.append((lx, ly, rx, ry, cnt))
-
-    visited.append((lx, ly, rx, ry))
-
-    goal = (len(board)-1, len(board)-1)
     while q:
 
-        lx, ly, rx, ry, cnt = q.popleft()
+        visited = []
 
-        if (lx, ly) == goal or (rx, ry) == goal:
-            print(cnt)
-            break
+        cost, robot = q.popleft()
 
-        for i in range(4):
+        if (robot[0], robot[1]) == (len(board_new)-2, len(board_new)-2) or (robot[2], robot[3]) == (len(board_new)-2, len(board_new)-2):
             
-            nlx = lx + dx[i]
-            nly = ly + dy[i]
-            nrx = rx + dx[i]
-            nry = ry + dy[i]
+            return cost
 
-            if nlx < 0 or nrx < 0 or nlx >= len(board) or nrx >= len(board) or nly < 0 or nry < 0 or nly >= len(board) or nry >= len(board):
+        moves = all_moves(board_new, robot)
 
-                continue
+        for move in moves:
 
-            if board[nlx][nly] == 1 or board[nrx][nry] == 1:
+            if move not in visited:
 
-                continue
+                q.append((cost + 1, move))
             
-            if (nlx, nly, nrx, nry) not in visited:
-                q.append((nlx, nly, nrx, nry, cnt+1))
-                visited.append((nlx, nly, nrx, nry))
-
-        if lx == rx:
-            for i in [-1, 1]:
-                nlx = lx + i
-                nrx = rx + i
-
-                if nlx < 0 or nlx >= len(board) or nrx < 0 or nrx >= len(board):
-                    
-                    continue
-
-                if board[nlx][ly] == 1 or board[nrx][ry] == 1:
-
-                    continue
-                
-                if (lx, ly, nlx, ly, cnt+1) not in visited:
-                    q.append((lx, ly, nlx, ly, cnt+1))
-                    visited.append((lx, ly, nlx, ly))
-                if (lx, ly, nlx, ly, cnt+1) not in visited:
-                    q.append((rx, ry, nrx, ry, cnt+1))
-                    visited.append((rx, ry, nrx, ry))
-
-        if ly == ry:
-            for i in [-1, 1]:
-                nly = ly + i
-                nry = ry + i
-
-                if nly < 0 or nly >= len(board) or nry < 0 or nry >= len(board):
-                    
-                    continue
-
-                if board[lx][nly] == 1 or board[rx][nry] == 1:
-
-                    continue
-                
-                if (lx, ly, nlx, ly, cnt+1) not in visited:
-                    q.append((lx, ly, lx, nly, cnt+1))
-                    visited.append((lx, ly, lx, nly))
-                if (rx, ry, rx, nry, cnt+1) not in visited:
-                    q.append((rx, ry, rx, nry, cnt+1))
-                    visited.append((rx, nry, rx, ry))
-
-solution(board)
+    return 0
+            
+print(solution(board))
 
 ## 예시 답안 ##
 

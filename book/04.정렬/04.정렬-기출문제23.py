@@ -6,13 +6,13 @@ n = int(input())
 
 array = []
 for _ in range(n):
-    name, kor, eng, mat = input().split()
-    array.append((-int(kor), int(eng), -int(mat), name))
+    name, a, b, c = input().split()
+    array.append((name, int(a), int(b), int(c)))
 
-array.sort()
+array.sort(key=lambda x: (-x[1], x[2], -x[3], x[0]))
 
-for i in range(n):
-    print(array[i][-1])
+for x in array:
+    print(x[0])
 
 ## 예시 답안 ##
 
