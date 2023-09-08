@@ -3,6 +3,7 @@
 ## 나의 답안 ##
 
 n, c = map(int, input().split())
+
 array = []
 for _ in range(n):
     array.append(int(input()))
@@ -10,25 +11,27 @@ for _ in range(n):
 array.sort()
 
 start = 1
-end = array[n-1] - array[0]
-result = None
+end = array[-1] - array[0]
+result = 0
 
 while start <= end:
 
-    mid = (start + end) // 2
-    base = array[0]
     cnt = 1
+    value = array[0]
+
+    mid = (start + end) // 2
 
     for i in range(1, n):
-        if array[i] >= base + mid:
+        if array[i] >= value + mid:
+            value = array[i]
             cnt += 1
-            base = array[i]
-    
-    if cnt < c:
-        end = mid - 1
-    else:
+
+    if cnt >= c:
         result = mid
         start = mid + 1
+
+    else:
+        end = mid - 1
 
 print(result)
 
@@ -55,10 +58,10 @@ while (start <= end):
             value = array[i]
             count += 1
             
-        if count >= c:
-            start = mid + 1
-            result = mid
-        else:
-            end = mid - 1
+    if count >= c:
+        start = mid + 1
+        result = mid
+    else:
+        end = mid - 1
             
 print(result)

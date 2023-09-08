@@ -1,38 +1,70 @@
 # 정렬된 배열에서 특정 수의 개수 구하기
 
-## 나의 답안 ##
+## 나의 답안 1 ##
 
 n, x = map(int, input().split())
 
 array = list(map(int, input().split()))
 
-result = 0
+def binary_search_left(array, target, start, end):
 
-def binary_search(array, target, start, end):
+    while start <= end:
 
-    global result
+        mid = (start + end) // 2
 
-    if start > end:
-        return None
-    
-    mid = (start + end) // 2
+        if array[mid] == target and (mid == 0 or array[mid-1] != target):
+            
+            return mid
+        
+        elif array[mid] >= target:
 
-    if array[mid] == target:
-        result += 1
-        binary_search(array, target, start, mid-1)
-        binary_search(array, target, mid+1, end)
-    
-    elif array[mid] > target:
-        binary_search(array, target, start, mid-1)
-    else:
-        binary_search(array, target, mid+1, end)
-    
-binary_search(array, x, 0, n-1)
+            return binary_search_left(array, target, start, mid-1)
+        
+        else:
 
-if result == 0:
+            return binary_search_left(array, target, mid+1, end)
+        
+def binary_search_right(array, target, start, end):
+
+    while start <= end:
+
+        mid = (start + end) // 2
+
+        if array[mid] == target and (mid == (n-1) or array[mid+1] != target):
+            
+            return mid
+        
+        elif array[mid] > target:
+
+            return binary_search_right(array, target, start, mid-1)
+        
+        else:
+
+            return binary_search_right(array, target, mid+1, end)
+        
+a = binary_search_left(array, x, 0, n-1)
+b = binary_search_right(array, x, 0, n-1)
+
+if a == None or b == None:
     print(-1)
 else:
-    print(result)
+    print(b-a+1)
+
+## 나의 답안 2 ##
+
+import bisect
+
+n, x = map(int, input().split())
+
+array = list(map(int, input().split()))
+
+a = bisect.bisect_left(array, x)
+b = bisect.bisect_right(array, x)
+
+if a == n and b == n:
+    print(-1)
+else:
+    print(b-a)
 
 ## 예시 답안 ##
 
