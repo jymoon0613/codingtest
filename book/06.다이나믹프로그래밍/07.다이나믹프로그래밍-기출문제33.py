@@ -11,20 +11,18 @@ for _ in range(n):
     ts.append(t)
     ps.append(p)
 
-d = [0] * (n+1)
+dp = [0] * (n+1)
 
-maxi = 0
-for i in range(n-1, -1, -1):
-    t, p = ts[i], ps[i]
-    end = i + t
+max_value = 0
+for day in range(n-1, -1, -1):
 
-    if end > n:
-        d[i] = maxi
-    else:
-        d[i] = max(p + d[end], maxi)
-        maxi = d[i]
+    time = day + ts[day]
 
-print(max(d))
+    if time <= n:
+        max_value = max(max_value, dp[time] + ps[day])
+        dp[day] = max_value
+
+print(max_value)
 
 ## 예시 답안 ##
 
