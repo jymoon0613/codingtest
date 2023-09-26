@@ -5,90 +5,77 @@
 from collections import deque
 
 n = int(input())
+INF = int(1e+9)
 
-all_fishes = []
 array = []
 for i in range(n):
     array.append(list(map(int, input().split())))
     for j in range(n):
         if array[i][j] == 9:
             sx, sy, ss = i, j, 2
-        elif array[i][j] != 0:
-            all_fishes.append((array[i][j], i, j))
-        else:
-            continue
 
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-def bfs(array, shark, fish, ss):
+def bfs():
     
-    time_table = [[0] * n for _ in range(n)]
-
-    sx, sy = shark
-
-    fx, fy = fish
+    time = [[-1] * n for _ in range(n)]
 
     q = deque()
 
     q.append((sx, sy))
 
+    array[sx][sy] = 0
+    time[sx][sy] = 0
+
     while q:
 
         x, y = q.popleft()
-
-        if x == fx and y == fy:
-
-            return time_table[x][y]
         
         for i in range(4):
 
             nx = x + dx[i]
             ny = y + dy[i]
 
-            if nx < 0 or nx >= n or ny < 0 or ny >= n:
-                continue
-            
-            if array[nx][ny] > ss:
+            if nx < 0 or nx >= n or ny < 0 or ny >= n or array[nx][ny] > ss:
                 continue
 
-            if time_table[nx][ny] == 0: 
+            if time[nx][ny] == -1: 
 
-                time_table[nx][ny] = time_table[x][y] + 1
+                time[nx][ny] = time[x][y] + 1
                 q.append((nx, ny))
 
-    return -1
+    return time
 
-def get_fishes(all_fishes, shark):
+def find_fish(time):
 
-    fishes = [fish for fish in all_fishes if fish[0] < shark[0]]
+    min_dist = INF
+    for i in range(n):
+        for j in range(n):
+            if time[i][j] != -1 and array[i][j] >= 1 and array[i][j] < ss:
+                if time[i][j] < min_dist:
+                    min_dist = time[i][j]
+                    fx, fy = i, j
 
-    if len(fishes) >= 2:
-        fishes.sort(key=lambda x: abs(x[1]-shark[1]) + abs(x[2]-shark[2]))
-
-    return fishes
+    if min_dist == INF:
+        return None
+    else:
+        return (fx, fy, min_dist)
 
 result = 0
 ate = 0
 while True:
 
-    fishes = get_fishes(all_fishes, (ss, sx, sy))
+    fish = find_fish(bfs())
 
-    if len(fishes) == 0:
+    if fish == None:
         break
 
-    fs, fx, fy = fishes[0]
+    result += fish[2]
 
-    time = bfs(array, (sx, sy), (fx, fy), ss)
+    sx, sy = fish[0], fish[1]
 
-    result += time
-
-    array[fx][fy] = 0
-    array[sx][sy] = 0
-
-    sx, sy = fx, fy
-
-    all_fishes.remove((fs, fx, fy))
+    array[fish[0]][fish[1]] = 0
 
     ate += 1
 
