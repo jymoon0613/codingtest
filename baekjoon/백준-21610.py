@@ -13,56 +13,36 @@ ds = [list(map(int, input().split())) for _ in range(m)]
 dx = [0, -1, -1, -1, 0, 1, 1, 1]
 dy = [-1, -1, 0, 1, 1, 1, 0, -1]
 
+cloud = [(n-1, 0), (n-1, 1), (n-2, 0), (n-2, 1)]
+
 for d, s in ds:
 
-    cloud = [[n-1, 0], [n-1, 1], [n-2, 0], [n-2, 1]]
+    moved = []
+    for x, y in cloud:
+        nx = (x + (s * dx[d-1])) % n
+        ny = (y + (s * dy[d-1])) % n
 
-    for i in range(4):
-        cloud[i][0] += s * dx[d-1]
-        cloud[i][1] += s * dy[d-1]
+        array[nx][ny] += 1
 
-    print(cloud)
+        moved.append((nx, ny))
 
-    for i in range(4):
-        cloud[i][0] %= n
-        cloud[i][1] %= n
-
-    print(cloud)
-
-    for c in cloud:
-        x, y = c
-        array[x][y] += 1
-
-    for c in cloud:
-        value = 0
-        x, y = c
+    for x, y in moved:
         for k in range(1, 8, 2):
 
             nx = x + dx[k]
             ny = y + dy[k]
 
-            if nx >= 0 and nx < n and ny >= 0 and ny < n:
-                if array[nx][ny] != 0:
-                    value += 1
-        array[x][y] += value
+            if nx >= 0 and nx < n and ny >= 0 and ny < n and array[nx][ny] != 0:
+                array[x][y] += 1
 
+    cloud_new = []
     for i in range(n):
         for j in range(n):
-            print(array[i][j], end=' ')
-        print()
-    print()
+            if (i,j) not in moved and array[i][j] >= 2:
+                array[i][j] -= 2
+                cloud_new.append((i,j))
 
-    for i in range(n):
-        for j in range(n):
-            if [i,j] not in cloud:
-                if array[i][j] >= 2:
-                    array[i][j] -= 2
-
-    for i in range(n):
-        for j in range(n):
-            print(array[i][j], end=' ')
-        print()
-    print()
+    cloud = cloud_new
 
 result = 0
 for i in range(n):
@@ -70,7 +50,3 @@ for i in range(n):
         result += array[i][j]
 
 print(result)
-
-
-
-    
