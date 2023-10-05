@@ -6,39 +6,78 @@ input = sys.stdin.readline
 
 n, m = map(int, input().split())
 
-array = [list(map(int, input().split())) for _ in range(n)]
-
-temp = [[0] * m for _ in range(n)]
+array = []
+cctvs = []
+for i in range(n):
+    array.append(list(map(int, input().split())))
+    for j in range(m):
+        if array[i][j] >= 1 and array[i][j] < 6:
+            cctvs.append((array[i][j], i, j))
 
 dx = [0, 0, -1, 1]
 dy = [1, -1, 0, 0]
 
+modes = [
+    [],
+    [[0], [1], [2], [3]],
+    [[0,1], [2,3]],
+    [[0,2], [0,3], [1,2], [1,3]],
+    [[0,1,2], [0,1,3], [0,2,3], [1,2,3]],
+    [[0,1,2,3]]
+]
+
 def get_score(array):
-    result = 0
+    value = 0
     for i in range(n):
         for j in range(m):
             if array[i][j] == 0:
-                result += 1
+                value += 1
 
-    return result
+    return value
 
-def dfs(x, y, d):
+def get_copy(array):
 
-    nx = x + dx[d]
-    ny = y + dy[d]
+    temp = [[0] * m for _ in range(n)]
 
-    if nx >= 0 and nx < n and ny >= 0 and ny < m and temp[nx][ny] != 6:
-        temp[nx][ny] = 1
-        dfs(nx, ny, d)
+    for i in range(n):
+        for j in range(m):
+            temp[i][j] = array[i][j]
+
+    return temp
+
+def dfs(array, mode, x, y):
+
+    for d in mode:
+        nx, ny = x, y
+        while True:
+            nx += dx[d]
+            ny += dy[d]
+
+            if nx < 0 or nx >= n or ny < 0 or ny >= m or array[nx][ny] == 6:
+                break
+            if array[nx][ny] == 0:
+                array[nx][ny] = 7
+
+    return array
     
-def search(r, c, num):
+result = int(1e+9)
+def search(array, cnt):
 
-    pass
+    global result
 
-global_min = int(1e+9)
-for i in range(n):
-    for j in range(m):
-        if array[i][j] >= 1 and array[i][j] < 6:
-            global_min = min(global_min, search(i, j, array[i][j]))
+    if cnt == len(cctvs):
+        result = min(result, get_score(array))
+        return
+    
+    else:
 
-print(global_min)
+        temp = get_copy(array)
+
+        cctv = cctvs[cnt]
+        for mode in modes[cctv[0]]:
+            temp = dfs(temp, mode, cctv[1], cctv[2])
+            search(temp, cnt+1)
+            temp = get_copy(array)
+
+search(array, 0)
+print(result)

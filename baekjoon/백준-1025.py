@@ -6,26 +6,27 @@ input = sys.stdin.readline
 
 n, m = map(int, input().split())
 
-array = [list(map(int, input().split())) for _ in range(n)]
+array = [list(input().rstrip()) for _ in range(n)]
 
-def binary_search(num, start, end):
+def check(num):
+    num = int(num)
+    return int(num**0.5)**2 == num
 
-    while start <= end:
+result = -1
+for x in range(n):
+    for y in range(m):
+        for step_x in range(-n,n):
+            for step_y in range(-m,m):
+                num = ''
+                nx, ny = x, y
+                if step_x == 0 and step_y == 0:
+                    continue
+                else:
+                    while nx >= 0 and nx < n and ny >= 0 and ny < m:
+                        num += array[nx][ny]
+                        if check(num):
+                            result = max(result, int(num))
+                        nx += step_x
+                        ny += step_y
 
-        mid = (start + end) // 2
-
-        if mid**2 == num:
-            return mid
-
-        if mid**2 > num:
-            end = mid - 1
-
-        else:
-            start = mid + 1
-
-    return None
-
-max_value = 0
-max_length = max(n,m)
-
-
+print(result)
