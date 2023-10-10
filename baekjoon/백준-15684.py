@@ -26,7 +26,6 @@ def check():
 
     return True
 
-
 result = 4
 def dfs(cnt, x, y):
 
