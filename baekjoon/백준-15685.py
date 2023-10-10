@@ -1,43 +1,43 @@
 # 15685: 드래곤 커브
 
-# import sys
+import sys
 
-# input = sys.stdin.readline
+input = sys.stdin.readline
 
-# n = int(input())
+n = int(input())
 
-# curves = []
-# for _ in range(n):
-#     x, y, d, g = map(int, input().split())
-#     curves.append((x,y,d,g))
+array = [[False] * 101 for _ in range(101)]
 
-# array = [[0] * 100 for _ in range(100)]
+dx = [1, 0, -1, 0]
+dy = [0, -1, 0, 1]
 
-# result = []
+curves = []
+for _ in range(n):
+    x, y, d, g = map(int, input().split())
+    curves.append((x,y,d,g))
 
-# dx = [1, 0, -1, 0]
-# dy = [0, -1, 0, 1]
+for curve in curves:
+    x, y, d, g = curve
 
-# d = 0
+    move = [d]
+    for _ in range(g):
+        temp = []
+        for i in range(len(move)):
+            nd = (move[-i-1] + 1) % 4
+            temp.append(nd)
+        move.extend(temp)
 
-# sx, sy = 1, 1
-# ex, ey = sx+dx[d], sy+dx[y]
+    array[y][x] = True
+    for d in move:
+        x += dx[d]
+        y += dy[d]
+        if x >= 0 and x <=100 and y >= 0 and y <= 100:
+            array[y][x] = True
 
-# result.append((sx,sy))
-# result.append((ex,ey))
+result = 0
+for y in range(100):
+    for x in range(100):
+        if array[y][x] and array[y][x+1] and array[y+1][x+1] and array[y+1][x]:
+            result += 1
 
-# print(result)
-
-# start = 0
-# while start < g:
-
-#     pass
-
-l = [(0,0), (1,0)]
-
-a = []
-for line in l:
-    x, y = line
-    a.append((x+1,y-1))
-
-print(a)
+print(result)

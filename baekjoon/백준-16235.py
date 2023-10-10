@@ -9,50 +9,54 @@ n, m, k = map(int, input().split())
 
 array = [[5] * n for _ in range(n)]
 
+trees = [[deque() for _ in range(n)] for _ in range(n)]
+
 a = [list(map(int, input().split())) for _ in range(n)]
 
-trees = deque()
 for _ in range(m):
-    trees.append(map(int, input().split()))
+    x, y, z = map(int, input().split())
+    trees[x-1][y-1].append(z)
 
 dx = [-1, -1, -1, 0, 0, 1, 1, 1]
 dy = [-1, 0, 1, -1, 1, -1, 0, 1]
 
 def spring_summer():
-    for i in range(len(trees)):
-        x, y, age = trees.popleft()
-        if age > array[x-1][y-1]:
-            temp[x-1][y-1] += (age // 2)
-            continue
-        else:
-            array[x-1][y-1] -= age
-            age += 1
-            trees.append((x, y, age))
-
-def fall_winter():
-    cnt = 0
-    for i in range(len(trees)):
-        x, y, age = trees[i+cnt]
-        if age % 5 == 0:
-            for j in range(8):
-                nx = x + dx[j]
-                ny = y + dy[j]
-                if nx >= 1 and nx < (n+1) and ny >= 1 and ny < (n+1):
-                    trees.appendleft((nx, ny, 1))
-                    cnt += 1
-
-def winter():
     for x in range(n):
         for y in range(n):
-            array[x][y] += temp[x][y]
+            l = len(trees[x][y])
+            for i in range(l):
+                if trees[x][y][i] > array[x][y]:
+                    for _ in range(i,l):
+                        array[x][y] += trees[x][y].pop() // 2
+                    break
+                else:
+                    array[x][y] -= trees[x][y][i]
+                    trees[x][y][i] += 1
+
+def fall_winter():
+    for x in range(n):
+        for y in range(n):
+            l = len(trees[x][y])
+            for i in range(l):
+                if trees[x][y][i] % 5 == 0:
+                    for j in range(8):
+                        nx = x + dx[j]
+                        ny = y + dy[j]
+                        if nx >= 0 and nx < n and ny >= 0 and ny < n:
+                            trees[nx][ny].appendleft(1)
+            array[x][y] += a[x][y]
 
 cnt = 0
-while cnt < k:
 
-    spring_and_summer()
-    fall()
-    winter()
+for _ in range(k):
+    spring_summer()
+    fall_winter()
 
     cnt += 1
 
-print(len(trees))
+result = 0
+for x in range(n):
+    for y in range(n):
+        result += len(trees[x][y])
+
+print(result)
